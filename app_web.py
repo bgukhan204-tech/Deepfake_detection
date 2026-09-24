@@ -42,7 +42,7 @@ except ImportError:
 
 app = Flask(__name__)
 app.secret_key = "deepshield_sec_key_2026_super_secret"
-DB_PATH = "deepshield.db"
+DB_PATH = os.environ.get("DB_PATH", os.path.join(tempfile.gettempdir(), "deepshield.db"))
 
 @app.before_request
 def handle_preflight():

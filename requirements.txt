@@ -1,6 +1,6 @@
-tflite-runtime
+tflite-runtime==2.14.0
 opencv-python-headless
-numpy
+numpy>=1.23.5,<2.0.0
 pillow
 Flask
 gunicorn
