@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DeepShield — Detect Deepfakes, AI Images & Edits</title>
-    <meta name="description" content="Dual-layer analysis: our Deep Learning model detects face-swaps while Error Level Analysis catches AI-generated content and pixel manipulation.">
+    <title>DeepShield AI — Multi-Modal Deepfake & Media Analysis Platform</title>
+    <meta name="description" content="Multi-modal deepfake detection platform: Deep Learning facial morph analysis, Error Level Analysis (ELA), video frame sampling, PDF reports, and Cybercrime reporting.">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
-    <!-- PDF Generation Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="app-wrapper">
@@ -23,10 +20,25 @@
                             <path d="m9 12 2 2 4-4"/>
                         </svg>
                     </div>
-                    <span class="brand-text">DeepShield</span>
+                    <span class="brand-text">DeepShield AI</span>
                 </div>
 
-                <div class="header-actions">
+                <div class="header-actions" style="display: flex; gap: 0.75rem; align-items: center;">
+                    <div class="lang-selector-wrapper" style="display: flex; align-items: center; gap: 0.4rem;">
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">🌐 Translate:</span>
+                        <select id="global-lang-select" class="custom-select" style="padding: 0.25rem 0.5rem; font-size: 0.78rem;" onchange="handleLanguageChange(this.value)">
+                            <option value="en">English</option>
+                            <option value="hi">Hindi (हिंदी)</option>
+                            <option value="ta">Tamil (தமிழ்)</option>
+                            <option value="te">Telugu (తెలుగు)</option>
+                            <option value="es">Spanish (Español)</option>
+                            <option value="fr">French (Français)</option>
+                            <option value="de">German (Deutsch)</option>
+                            <option value="zh-CN">Chinese (中文)</option>
+                            <option value="ja">Japanese (日本語)</option>
+                            <option value="ar">Arabic (العربية)</option>
+                        </select>
+                    </div>
                     <div class="engine-status-pill">
                         <span class="status-dot-pulse"></span>
                         <span class="status-label">AI + ELA Active</span>
@@ -41,25 +53,27 @@
             <section class="hero-section">
                 <div class="hero-badge">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                    <span>MULTI-MODAL DETECTION ENGINE</span>
+                    <span>MULTI-MODAL MEDIA INTEGRITY ARCHITECTURE</span>
                 </div>
-                <h1 class="hero-title">Detect Deepfakes,<br>AI Images & Edits</h1>
+                <h1 class="hero-title">Detect Deepfakes,<br>AI Images & Video Manipulation</h1>
                 <p class="hero-description">
-                    Dual-layer analysis: our Deep Learning model detects face-swaps while Error Level Analysis catches AI-generated content and pixel manipulation.
+                    Multi-Spectral Orchestrator combining TensorFlow/Keras Deep Learning, Error Level Analysis (ELA), U-Net Spatial Segmentation, Discrete Cosine Transform (DCT), and Video Frame Sampling.
                 </p>
 
-                <!-- Sub-Feature Pills Row (Matches Video deepfake.mp4) -->
+                <!-- Sub-Feature Pills Row -->
                 <div class="hero-feature-pills">
-                    <div class="feature-pill"><span class="pill-icon">🖼️</span> AI-Generated Images</div>
-                    <div class="feature-pill"><span class="pill-icon">👤</span> Face Swaps</div>
-                    <div class="feature-pill"><span class="pill-icon">❌</span> Edited Photos</div>
-                    <div class="feature-pill"><span class="pill-icon">📹</span> Videos</div>
+                    <div class="feature-pill"><span class="pill-icon">🖼️</span> Image Analysis</div>
+                    <div class="feature-pill"><span class="pill-icon">📹</span> Live Camera</div>
+                    <div class="feature-pill"><span class="pill-icon">🎥</span> Video Sampling</div>
+                    <div class="feature-pill"><span class="pill-icon">⚡</span> Batch Processing</div>
+                    <div class="feature-pill"><span class="pill-icon">📄</span> PDF Reports</div>
+                    <div class="feature-pill"><span class="pill-icon">🚨</span> Cybercrime Filing</div>
                 </div>
             </section>
 
             <!-- Analysis Workspace Card Container -->
             <section class="workspace-card">
-                <!-- Mode Switcher Tabs -->
+                <!-- Mode Switcher Tabs (Matching Architecture Presentation Layer) -->
                 <div class="mode-tabs">
                     <button class="tab-btn active" id="tab-btn-image" onclick="switchTab('image')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M20.4 14.5 16 10l-6 6-3-3L3.6 16.5"/></svg>
@@ -67,7 +81,7 @@
                     </button>
                     <button class="tab-btn" id="tab-btn-camera" onclick="switchTab('camera')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-                        <span>Use Camera</span>
+                        <span>Live Camera</span>
                     </button>
                     <button class="tab-btn" id="tab-btn-video" onclick="switchTab('video')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
@@ -75,11 +89,19 @@
                     </button>
                     <button class="tab-btn" id="tab-btn-batch" onclick="switchTab('batch')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                        <span>Batch Mode</span>
+                        <span>Batch Scan</span>
                     </button>
                     <button class="tab-btn" id="tab-btn-dashboard" onclick="switchTab('dashboard')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
                         <span>History Dashboard</span>
+                    </button>
+                    <button class="tab-btn" id="tab-btn-report" onclick="switchTab('report')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        <span>PDF Report</span>
+                    </button>
+                    <button class="tab-btn" id="tab-btn-cybercrime" onclick="switchTab('cybercrime')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <span>Cybercrime Reporting</span>
                     </button>
                 </div>
 
@@ -98,43 +120,41 @@
                             </div>
 
                             <div class="preview-container" id="image-preview-container" style="display:none;" onclick="event.stopPropagation()">
-                                <div class="image-preview-wrapper">
-                                    <img id="image-preview-element" src="" alt="Image Preview">
-                                    <div class="preview-actions-overlay">
-                                        <button type="button" class="action-btn" onclick="document.getElementById('image-file-input').click()">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
-                                            <span>Change</span>
-                                        </button>
-                                        <button type="button" class="action-btn danger" onclick="clearImagePreview()">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                                            <span>Remove</span>
-                                        </button>
-                                    </div>
+                                <div class="preview-header">
+                                    <span class="preview-filename" id="img-preview-filename">image.jpg</span>
+                                    <button type="button" class="btn-change" onclick="document.getElementById('image-file-input').click()">Change File</button>
+                                </div>
+                                <div class="preview-media-box">
+                                    <img id="image-preview-element" src="" alt="Selected Preview">
+                                    <img id="image-heatmap-element" src="" alt="ELA Heatmap" style="display:none;">
+                                </div>
+                                
+                                <div class="toggle-bar">
+                                    <label class="toggle-label">
+                                        <input type="checkbox" id="toggle-heatmap" onchange="toggleHeatmapOverlay(this.checked)">
+                                        <span class="toggle-custom"></span>
+                                        <span class="toggle-text">Show ELA Forensic Heatmap</span>
+                                    </label>
                                 </div>
                             </div>
                         </div>
 
                         <div class="action-bar">
-                            <button type="button" class="btn-analyze" id="btn-analyze-image" disabled onclick="analyzeImage()">
-                                <svg id="analyze-spinner" class="spinner-icon" style="display:none" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg>
-                                <span id="analyze-btn-text">Analyze Image</span>
-                            </button>
+                            <button type="button" class="btn-analyze" id="btn-analyze-image" disabled onclick="runImageAnalysis()">Analyze Image</button>
+                        </div>
+
+                        <div class="analysis-spinner" id="image-spinner" style="display:none;">
+                            <div class="spinner-ring"></div>
+                            <span class="spinner-text">Executing Deep Learning & Error Level Analysis...</span>
                         </div>
 
                         <!-- Results Card -->
                         <div class="results-card" id="image-results-card" style="display:none;">
                             <div class="results-header">
-                                <h3>Analysis Results</h3>
-                                <div class="header-right-tools">
-                                    <button class="btn-export-pdf" onclick="exportReportPDF('image-results-card')">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
-                                        <span>Export PDF</span>
-                                    </button>
-                                    <span class="confidence-chip" id="img-confidence-chip">95.46% confidence</span>
-                                </div>
+                                <h3>Image Forensic Analysis Results</h3>
+                                <span class="confidence-chip" id="img-confidence-chip">95.5% confidence</span>
                             </div>
 
-                            <!-- Verdict Banner -->
                             <div class="verdict-banner genuine" id="img-verdict-banner">
                                 <div class="verdict-icon" id="img-verdict-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
@@ -145,76 +165,26 @@
                                 <span class="status-badge" id="img-status-badge">STATUS: GENUINE</span>
                             </div>
 
-                            <!-- Speedometer Gauge Meter & Context Row -->
-                            <div class="gauge-and-context-row">
-                                <div class="gauge-card">
-                                    <span class="gauge-label">CONFIDENCE GAUGE</span>
-                                    <div class="speedometer-container">
-                                        <svg class="speedometer-svg" viewBox="0 0 200 110">
-                                            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="14" stroke-linecap="round"/>
-                                            <path id="gauge-arc-fill" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#10b981" stroke-width="14" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="0"/>
-                                            <g id="gauge-needle-group" transform="rotate(-90 100 100)">
-                                                <polygon points="96,100 104,100 100,25" fill="#ffffff"/>
-                                                <circle cx="100" cy="100" r="8" fill="#6366f1"/>
-                                            </g>
-                                        </svg>
-                                        <div class="gauge-val-display" id="gauge-val-display">95.4%</div>
-                                    </div>
-                                </div>
-
-                                <div class="context-box flex-grow">
-                                    <span class="context-label">CONTEXT & REASON</span>
-                                    <p id="img-reason-text">Pristine sensor noise, clean frequency compression, and consistent facial geometry detected. Content is genuine.</p>
+                            <div class="context-box" style="margin-bottom: 1.25rem;">
+                                <span class="context-label">FORENSIC EXPLANATION</span>
+                                <p id="img-reason-text">Pristine camera sensor noise and consistent JPEG compression detected. No facial morphing found.</p>
                             </div>
 
-                            <!-- Forensic Audit Metadata Grid -->
-                            <div class="forensic-meta-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; margin: 1.25rem 0;">
-                                <div class="meta-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); padding: 0.75rem; border-radius: 10px; text-align: center;">
-                                    <span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 0.2rem;">ANALYSIS ID</span>
-                                    <span id="img-meta-id" style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--accent-violet);">DS-000000</span>
-                                </div>
-                                <div class="meta-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); padding: 0.75rem; border-radius: 10px; text-align: center;">
-                                    <span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 0.2rem;">RESOLUTION</span>
-                                    <span id="img-meta-res" style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary);">N/A</span>
-                                </div>
-                                <div class="meta-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); padding: 0.75rem; border-radius: 10px; text-align: center;">
-                                    <span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 0.2rem;">FILE SIZE</span>
-                                    <span id="img-meta-size" style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary);">N/A</span>
-                                </div>
-                                <div class="meta-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); padding: 0.75rem; border-radius: 10px; text-align: center;">
-                                    <span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 0.2rem;">PROC. TIME</span>
-                                    <span id="img-meta-time" style="font-size: 0.85rem; font-weight: 700; color: var(--status-green);">0.00s</span>
-                                </div>
-                                <div class="meta-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); padding: 0.75rem; border-radius: 10px; text-align: center;">
-                                    <span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 0.2rem;">TIMESTAMP</span>
-                                    <span id="img-meta-stamp" style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary);">Just now</span>
-                                </div>
-                            </div>
-
-                            <!-- Compare Original vs AI Heatmap Viewer -->
-                            <div class="heatmap-comparison-section">
-                                <div class="comparison-header">
-                                    <span class="section-subtitle">FORENSIC COMPARISON ENGINE</span>
-                                    <div class="comparison-toggle-pills">
-                                        <button class="pill-btn active" id="btn-show-sidebyside" onclick="setComparisonMode('sidebyside')">Side-by-Side</button>
-                                        <button class="pill-btn" id="btn-show-heatmap" onclick="setComparisonMode('heatmap')">AI Heatmap Only</button>
-                                    </div>
-                                </div>
-
-                                <div class="comparison-viewport side-by-side" id="comparison-viewport">
-                                    <div class="view-card">
-                                        <span class="view-label">Original Photo</span>
-                                        <img id="comp-orig-img" src="" alt="Original">
-                                    </div>
-                                    <div class="view-card">
-                                        <span class="view-label">AI Manipulation Heatmap (ELA)</span>
-                                        <img id="comp-heatmap-img" src="" alt="Heatmap">
-                                    </div>
-                                </div>
+                            <!-- Export Action Bar -->
+                            <div class="result-actions-row" style="display: flex; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap;">
+                                <button type="button" class="btn-choose" onclick="downloadCurrentPDFReport()" style="background: var(--status-blue-bg); color: var(--status-blue); border: 1px solid rgba(59, 130, 246, 0.3);">
+                                    📄 Export PDF Report
+                                </button>
+                                <button type="button" class="btn-choose" onclick="openCybercrimeReportModal()" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
+                                    🚨 Report Cybercrime
+                                </button>
+                                <button type="button" class="btn-choose" onclick="playAudioVoiceover()" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
+                                    🔊 Listen Audio Voiceover
+                                </button>
                             </div>
 
                             <!-- Metrics Progress Bars -->
-                            <div class="metrics-container">
+                            <div class="metrics-container" style="margin-bottom: 1.5rem;">
                                 <div class="metric-row">
                                     <div class="metric-info">
                                         <span class="metric-name authentic"><span class="dot green"></span> AUTHENTIC</span>
@@ -238,14 +208,14 @@
 
                             <!-- Detection Method Breakdown -->
                             <div class="breakdown-section">
-                                <span class="breakdown-title">DETECTION METHOD BREAKDOWN</span>
+                                <span class="breakdown-title">DETECTION ENGINE BREAKDOWN</span>
                                 <div class="breakdown-grid">
                                     <div class="method-card">
                                         <div class="method-header">
-                                            <div class="method-name"><span class="method-icon-dot violet"></span> Deep Learning Model</div>
+                                            <div class="method-name"><span class="method-icon-dot violet"></span> TensorFlow / Keras Model</div>
                                             <span class="method-val" id="img-model-val">4.53% Fake</span>
                                         </div>
-                                        <p class="method-desc">Detects face-swap deepfakes by analyzing facial inconsistencies</p>
+                                        <p class="method-desc">Detects facial synthesis & deepfake morphing</p>
                                         <div class="mini-bar-track">
                                             <div class="mini-bar-fill violet" id="img-model-bar" style="width: 4.53%;"></div>
                                         </div>
@@ -253,10 +223,10 @@
 
                                     <div class="method-card">
                                         <div class="method-header">
-                                            <div class="method-name"><span class="method-icon-dot blue"></span> ELA Analysis</div>
+                                            <div class="method-name"><span class="method-icon-dot blue"></span> ELA Forensic Engine</div>
                                             <span class="method-val" id="img-ela-val">6.53%</span>
                                         </div>
-                                        <p class="method-desc">Error Level Analysis detects AI-generated content and post-edits</p>
+                                        <p class="method-desc">Error Level Analysis inspects recompression differences</p>
                                         <div class="mini-bar-track">
                                             <div class="mini-bar-fill blue" id="img-ela-bar" style="width: 6.53%;"></div>
                                         </div>
@@ -266,196 +236,30 @@
                         </div>
                     </div>
 
-                    <!-- ── TAB 2: LIVE WEBCAM ── -->
+                    <!-- ── TAB 2: LIVE CAMERA ── -->
                     <div class="tab-panel" id="panel-camera">
-                        <div class="camera-wrapper">
-                            <div class="camera-stream-box" id="camera-stream-box">
-                                <video id="webcam-video" autoplay playsinline muted></video>
-                                <canvas id="webcam-canvas" style="display:none;"></canvas>
-                                
-                                <div class="camera-placeholder" id="camera-placeholder">
-                                    <div class="upload-icon-circle">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+                        <div class="camera-workspace">
+                            <div class="camera-feed-container">
+                                <video id="camera-video-feed" autoplay playsinline muted></video>
+                                <canvas id="camera-canvas" style="display:none;"></canvas>
+
+                                <div class="camera-hud-overlay">
+                                    <div class="hud-top-bar">
+                                        <span class="hud-live-pill"><span class="red-pulse-dot"></span> LIVE FEED</span>
+                                        <span class="hud-fps-pill" id="camera-fps">30 FPS</span>
                                     </div>
-                                    <span class="dropzone-heading">Live Camera Feed</span>
-                                    <span class="dropzone-sub" id="camera-status-sub">Click below to allow camera access or upload file</span>
-                                    <div style="display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; margin-top:0.5rem;">
-                                        <button type="button" class="btn-choose" onclick="startCamera()">Enable Camera Access</button>
-                                        <input type="file" id="camera-file-input" accept="image/png, image/jpeg, image/webp" style="display:none" onchange="handleCameraFileSelect(event)">
-                                        <button type="button" class="action-btn" onclick="event.stopPropagation(); document.getElementById('camera-file-input').click()">Upload Camera File</button>
-                                    </div>
-                                </div>
-
-                                <div class="camera-controls-overlay" id="camera-controls" style="display:none;">
-                                    <button type="button" class="btn-snap" onclick="takeSnapshot()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
-                                        <span>Take Picture</span>
-                                    </button>
-                                    <button type="button" class="btn-cancel" onclick="stopCamera()">Stop Camera</button>
-                                </div>
-                            </div>
-
-                            <!-- Captured Camera Preview -->
-                            <div class="preview-container" id="camera-preview-box" style="display:none;">
-                                <div class="image-preview-wrapper">
-                                    <img id="camera-captured-img" src="" alt="Captured Photo">
-                                    <div class="preview-actions-overlay">
-                                        <button type="button" class="action-btn" onclick="retakePhoto()">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-                                            <span>Retake Picture</span>
-                                        </button>
-                                        <button type="button" class="action-btn danger" onclick="clearCameraPhoto()">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                                            <span>Remove</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="action-bar" id="camera-action-bar" style="display:none;">
-                            <button type="button" class="btn-analyze" id="btn-analyze-camera" disabled onclick="analyzeCameraSnapshot()">
-                                <svg id="cam-spinner" class="spinner-icon" style="display:none" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg>
-                                <span id="cam-btn-text">Upload & Analyze Picture</span>
-                            </button>
-                        </div>
-
-                        <!-- Camera Dedicated Results Card -->
-                        <div class="results-card" id="camera-results-card" style="display:none;">
-                            <div class="results-header">
-                                <h3>Analysis Results</h3>
-                                <div class="header-right-tools">
-                                    <button class="btn-export-pdf" onclick="exportReportPDF('camera-results-card')">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
-                                        <span>Export PDF</span>
-                                    </button>
-                                    <span class="confidence-chip" id="cam-confidence-chip">95.46% confidence</span>
-                                </div>
-                            </div>
-
-                            <div class="verdict-banner genuine" id="cam-verdict-banner">
-                                <div class="verdict-icon" id="cam-verdict-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                </div>
-                                <div class="verdict-text-group">
-                                    <span class="verdict-title">VERDICT<br><strong id="cam-verdict-name">Authentic Image</strong></span>
-                                </div>
-                                <span class="status-badge" id="cam-status-badge">STATUS: GENUINE</span>
-                            </div>
-
-                            <div class="gauge-and-context-row">
-                                <div class="gauge-card">
-                                    <span class="gauge-label">CONFIDENCE GAUGE</span>
-                                    <div class="speedometer-container">
-                                        <svg class="speedometer-svg" viewBox="0 0 200 110">
-                                            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="14" stroke-linecap="round"/>
-                                            <path id="cam-gauge-arc-fill" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#10b981" stroke-width="14" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="0"/>
-                                            <g id="cam-gauge-needle-group" transform="rotate(-90 100 100)">
-                                                <polygon points="96,100 104,100 100,25" fill="#ffffff"/>
-                                                <circle cx="100" cy="100" r="8" fill="#6366f1"/>
-                                            </g>
-                                        </svg>
-                                        <div class="gauge-val-display" id="cam-gauge-val-display">95.4%</div>
-                                    </div>
-                                </div>
-
-                                <div class="context-box flex-grow">
-                                    <span class="context-label">CONTEXT & REASON</span>
-                                    <p id="cam-reason-text">Pristine sensor noise, clean frequency compression, and consistent facial geometry detected. Content is genuine.</p>
-                            </div>
-
-                            <!-- Forensic Audit Metadata Grid -->
-                            <div class="forensic-meta-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; margin: 1.25rem 0;">
-                                <div class="meta-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); padding: 0.75rem; border-radius: 10px; text-align: center;">
-                                    <span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 0.2rem;">ANALYSIS ID</span>
-                                    <span id="cam-meta-id" style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--accent-violet);">DS-000000</span>
-                                </div>
-                                <div class="meta-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); padding: 0.75rem; border-radius: 10px; text-align: center;">
-                                    <span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 0.2rem;">RESOLUTION</span>
-                                    <span id="cam-meta-res" style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary);">N/A</span>
-                                </div>
-                                <div class="meta-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); padding: 0.75rem; border-radius: 10px; text-align: center;">
-                                    <span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 0.2rem;">FILE SIZE</span>
-                                    <span id="cam-meta-size" style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary);">N/A</span>
-                                </div>
-                                <div class="meta-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); padding: 0.75rem; border-radius: 10px; text-align: center;">
-                                    <span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 0.2rem;">PROC. TIME</span>
-                                    <span id="cam-meta-time" style="font-size: 0.85rem; font-weight: 700; color: var(--status-green);">0.00s</span>
-                                </div>
-                                <div class="meta-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); padding: 0.75rem; border-radius: 10px; text-align: center;">
-                                    <span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 0.2rem;">TIMESTAMP</span>
-                                    <span id="cam-meta-stamp" style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary);">Just now</span>
-                                </div>
-                            </div>
-
-                            <div class="heatmap-comparison-section">
-                                <div class="comparison-header">
-                                    <span class="section-subtitle">FORENSIC COMPARISON ENGINE</span>
-                                    <div class="comparison-toggle-pills">
-                                        <button class="pill-btn active" id="cam-btn-show-sidebyside" onclick="setCameraComparisonMode('sidebyside')">Side-by-Side</button>
-                                        <button class="pill-btn" id="cam-btn-show-heatmap" onclick="setCameraComparisonMode('heatmap')">AI Heatmap Only</button>
-                                    </div>
-                                </div>
-
-                                <div class="comparison-viewport side-by-side" id="cam-comparison-viewport">
-                                    <div class="view-card">
-                                        <span class="view-label">Original Photo</span>
-                                        <img id="cam-comp-orig-img" src="" alt="Original">
-                                    </div>
-                                    <div class="view-card">
-                                        <span class="view-label">AI Manipulation Heatmap (ELA)</span>
-                                        <img id="cam-comp-heatmap-img" src="" alt="Heatmap">
+                                    <div class="hud-face-target-box" id="hud-face-box">
+                                        <div class="corner-tl"></div>
+                                        <div class="corner-tr"></div>
+                                        <div class="corner-bl"></div>
+                                        <div class="corner-br"></div>
+                                        <span class="hud-face-label" id="hud-verdict-label">SCANNING FACE...</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="metrics-container">
-                                <div class="metric-row">
-                                    <div class="metric-info">
-                                        <span class="metric-name authentic"><span class="dot green"></span> AUTHENTIC</span>
-                                        <span class="metric-val authentic" id="cam-auth-val">95.46%</span>
-                                    </div>
-                                    <div class="progress-track">
-                                        <div class="progress-fill authentic" id="cam-auth-bar" style="width: 95.46%;"></div>
-                                    </div>
-                                </div>
-
-                                <div class="metric-row">
-                                    <div class="metric-info">
-                                        <span class="metric-name manipulated"><span class="dot red"></span> MANIPULATED</span>
-                                        <span class="metric-val manipulated" id="cam-manip-val">4.54%</span>
-                                    </div>
-                                    <div class="progress-track">
-                                        <div class="progress-fill manipulated" id="cam-manip-bar" style="width: 4.54%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="breakdown-section">
-                                <span class="breakdown-title">DETECTION METHOD BREAKDOWN</span>
-                                <div class="breakdown-grid">
-                                    <div class="method-card">
-                                        <div class="method-header">
-                                            <div class="method-name"><span class="method-icon-dot violet"></span> Deep Learning Model</div>
-                                            <span class="method-val" id="cam-model-val">4.53% Fake</span>
-                                        </div>
-                                        <p class="method-desc">Detects face-swap deepfakes by analyzing facial inconsistencies</p>
-                                        <div class="mini-bar-track">
-                                            <div class="mini-bar-fill violet" id="cam-model-bar" style="width: 4.53%;"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="method-card">
-                                        <div class="method-header">
-                                            <div class="method-name"><span class="method-icon-dot blue"></span> ELA Analysis</div>
-                                            <span class="method-val" id="cam-ela-val">6.53%</span>
-                                        </div>
-                                        <p class="method-desc">Error Level Analysis detects AI-generated content and post-edits</p>
-                                        <div class="mini-bar-track">
-                                            <div class="mini-bar-fill blue" id="cam-ela-bar" style="width: 6.53%;"></div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="action-bar" style="margin-top:1rem;">
+                                <button type="button" class="btn-analyze" id="btn-capture-camera" onclick="captureCameraSnapshot()">Snapshot & Analyze</button>
                             </div>
                         </div>
                     </div>
@@ -463,39 +267,37 @@
                     <!-- ── TAB 3: VIDEO ANALYSIS ── -->
                     <div class="tab-panel" id="panel-video">
                         <div class="upload-dropzone" id="video-dropzone" onclick="document.getElementById('video-file-input').click()">
-                            <input type="file" id="video-file-input" accept="video/mp4, video/mov, video/avi, video/webm" style="display:none" onchange="handleVideoSelect(event)">
+                            <input type="file" id="video-file-input" accept="video/mp4, video/avi, video/mov, video/webm" style="display:none" onchange="handleVideoSelect(event)">
                             <div class="dropzone-content" id="video-dropzone-content">
                                 <div class="upload-icon-circle">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
                                 </div>
-                                <span class="dropzone-heading">Drop video here</span>
-                                <span class="dropzone-sub">MP4, MOV, AVI, WEBM • Deepfake detection & Audio Dubbing</span>
+                                <span class="dropzone-heading">Drop Video File Here</span>
+                                <span class="dropzone-sub">MP4, MOV, AVI, WEBM • Up to 200MB</span>
                                 <button type="button" class="btn-choose" onclick="event.stopPropagation(); document.getElementById('video-file-input').click()">Choose Video</button>
                             </div>
 
-                            <div class="video-preview-wrapper" id="video-preview-container" style="display:none; width: 100%;" onclick="event.stopPropagation()">
-                                <video id="video-preview-element" controls style="width:100%; max-height:360px; border-radius:12px; background:#000; display:block; margin-bottom:0.75rem;"></video>
-                                <div class="video-file-info-bar" style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 0.75rem 1rem; border-radius: 10px; border: 1px solid var(--card-border);">
-                                    <div class="video-meta">
-                                        <span class="video-filename" id="video-filename-text" style="font-weight:700;">video.mp4</span> • 
-                                        <span class="video-filesize" id="video-filesize-text" style="color:var(--text-muted);">19.6 MB</span>
-                                    </div>
-                                    <button type="button" class="action-btn danger" onclick="clearVideoSelection()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                                        <span>Remove</span>
-                                    </button>
+                            <div class="preview-container" id="video-preview-container" style="display:none;" onclick="event.stopPropagation()">
+                                <div class="preview-header">
+                                    <span class="preview-filename" id="vid-preview-filename">video.mp4</span>
+                                    <button type="button" class="btn-change" onclick="document.getElementById('video-file-input').click()">Change Video</button>
+                                </div>
+                                <div class="preview-media-box">
+                                    <video id="video-preview-element" controls style="max-height: 260px; width: 100%; object-fit: contain;"></video>
                                 </div>
                             </div>
                         </div>
 
                         <div class="action-bar">
-                            <button type="button" class="btn-analyze" id="btn-analyze-video" disabled onclick="analyzeVideo()">
-                                <svg id="vid-spinner" class="spinner-icon" style="display:none" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg>
-                                <span id="vid-btn-text">Analyze Video</span>
-                            </button>
+                            <button type="button" class="btn-analyze" id="btn-analyze-video" disabled onclick="runVideoAnalysis()">Run Video Sampling Analysis</button>
                         </div>
 
-                        <!-- Video Results -->
+                        <div class="analysis-spinner" id="video-spinner" style="display:none;">
+                            <div class="spinner-ring"></div>
+                            <span class="spinner-text">Extracting frames, computing sampling, and calculating temporal scores...</span>
+                        </div>
+
+                        <!-- Video Results Card -->
                         <div class="results-card" id="video-results-card" style="display:none;">
                             <div class="results-header">
                                 <h3>Video Analysis Results</h3>
@@ -515,6 +317,19 @@
                             <div class="context-box" style="margin-bottom: 1.25rem;">
                                 <span class="context-label">CONTEXT & REASON</span>
                                 <p id="vid-reason-text">Pristine sensor noise, clean frequency compression, and consistent facial geometry detected. Content is genuine.</p>
+                            </div>
+
+                            <!-- Export Action Bar -->
+                            <div class="result-actions-row" style="display: flex; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap;">
+                                <button type="button" class="btn-choose" onclick="downloadCurrentPDFReport()" style="background: var(--status-blue-bg); color: var(--status-blue); border: 1px solid rgba(59, 130, 246, 0.3);">
+                                    📄 Export PDF Report
+                                </button>
+                                <button type="button" class="btn-choose" onclick="openCybercrimeReportModal()" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
+                                    🚨 Report Cybercrime
+                                </button>
+                                <button type="button" class="btn-choose" onclick="playAudioVoiceover()" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
+                                    🔊 Listen Audio Voiceover
+                                </button>
                             </div>
 
                             <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-bottom: 1.25rem;">
@@ -575,7 +390,7 @@
                         </div>
                     </div>
 
-                    <!-- ── TAB 4: BATCH PROCESSING ── -->
+                    <!-- ── TAB 4: BATCH SCAN ── -->
                     <div class="tab-panel" id="panel-batch">
                         <div class="upload-dropzone" id="batch-dropzone" onclick="document.getElementById('batch-file-input').click()">
                             <input type="file" id="batch-file-input" multiple accept="image/png, image/jpeg, image/webp" style="display:none" onchange="handleBatchSelect(event)">
@@ -583,8 +398,8 @@
                                 <div class="upload-icon-circle">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
                                 </div>
-                                <span class="dropzone-heading">Drop Multiple Images Here</span>
-                                <span class="dropzone-sub">Batch analyze images simultaneously</span>
+                                <span class="dropzone-heading">Drop Multiple Files Here</span>
+                                <span class="dropzone-sub">Batch scan images & video frames simultaneously</span>
                                 <button type="button" class="btn-choose" onclick="event.stopPropagation(); document.getElementById('batch-file-input').click()">Select Multiple Files</button>
                             </div>
 
@@ -601,7 +416,7 @@
                         </div>
 
                         <div class="action-bar">
-                            <button type="button" class="btn-analyze" id="btn-run-batch" disabled onclick="runBatchAnalysis()">Run Batch Analysis</button>
+                            <button type="button" class="btn-analyze" id="btn-run-batch" disabled onclick="runBatchAnalysis()">Run Batch Scan Pipeline</button>
                         </div>
 
                         <!-- Batch Table Results -->
@@ -717,12 +532,100 @@
                             </table>
                         </div>
                     </div>
+
+                    <!-- ── TAB 6: PDF REPORT GENERATOR ── -->
+                    <div class="tab-panel" id="panel-report">
+                        <div class="report-generator-card" style="padding: 1.5rem; background: rgba(15, 23, 42, 0.6); border-radius: 12px; border: 1px solid var(--border-color);">
+                            <h3 style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.2rem; color: var(--text-primary);">📄 PDF Forensic Audit Report Service</h3>
+                            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.25rem;">Generate official, publication-ready PDF Forensic Evidence Reports with SHA-256 digital verification hashes.</p>
+
+                            <div style="display: flex; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap;">
+                                <div style="flex: 1; min-width: 240px;">
+                                    <label style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;">Select Analysis ID from History:</label>
+                                    <select id="report-analysis-id-select" class="custom-select">
+                                        <option value="">Latest Active Scan</option>
+                                    </select>
+                                </div>
+                                <div style="display: flex; align-items: flex-end;">
+                                    <button type="button" class="btn-analyze" onclick="generateDedicatedPDFReport()" style="padding: 0.6rem 1.5rem;">Generate Official PDF Report</button>
+                                </div>
+                            </div>
+
+                            <div id="pdf-download-result-box" style="display:none; padding: 1.25rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <h4 style="margin: 0 0 0.3rem 0; color: #10b981;">✅ PDF Forensic Report Generated Successfully!</h4>
+                                        <span id="pdf-report-sha" style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--text-muted);">SHA-256: 0x...</span>
+                                    </div>
+                                    <a id="pdf-report-download-btn" href="#" target="_blank" class="btn-choose" style="background: #10b981; color: #fff; text-decoration: none;">Download PDF Document</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── TAB 7: CYBERCRIME REPORTING PORTAL ── -->
+                    <div class="tab-panel" id="panel-cybercrime">
+                        <div class="cybercrime-card" style="padding: 1.5rem; background: rgba(15, 23, 42, 0.6); border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.3);">
+                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                                <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(239, 68, 68, 0.2); display: flex; align-items: center; justify-content: center; color: #ef4444;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                </div>
+                                <div>
+                                    <h3 style="margin:0; font-size: 1.2rem; color: #ef4444;">🚨 Official Cybercrime Complaint Portal</h3>
+                                    <span style="font-size: 0.82rem; color: var(--text-muted);">File formal evidence complaints for deepfakes, identity theft, or unauthorized media manipulation.</span>
+                                </div>
+                            </div>
+
+                            <form id="cybercrime-form" onsubmit="submitCybercrimeComplaint(event)">
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem;">
+                                    <div class="form-group">
+                                        <label style="display:block; font-size:0.8rem; color:var(--text-muted); margin-bottom:0.3rem;">Victim / Reporter Name</label>
+                                        <input type="text" id="cc-victim-name" class="custom-select" required placeholder="Enter complainant name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="display:block; font-size:0.8rem; color:var(--text-muted); margin-bottom:0.3rem;">Target Platform</label>
+                                        <input type="text" id="cc-platform" class="custom-select" required placeholder="e.g. WhatsApp, Instagram, X (Twitter), YouTube">
+                                    </div>
+                                </div>
+
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem;">
+                                    <div class="form-group">
+                                        <label style="display:block; font-size:0.8rem; color:var(--text-muted); margin-bottom:0.3rem;">Reporting Law Enforcement Agency</label>
+                                        <select id="cc-agency" class="custom-select">
+                                            <option value="National Cyber Crime Reporting Portal (NCRP - India)">NCRP (National Cyber Crime Reporting Portal)</option>
+                                            <option value="FBI Internet Crime Complaint Center (IC3 - US)">FBI IC3 (Internet Crime Complaint Center)</option>
+                                            <option value="Interpol Cybercrime Directorate">Interpol Cybercrime Directorate</option>
+                                            <option value="Europol European Cybercrime Centre (EC3)">Europol EC3</option>
+                                            <option value="Local Cyber Police Station">Local Police Department / Cyber Cell</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="display:block; font-size:0.8rem; color:var(--text-muted); margin-bottom:0.3rem;">Incident Date</label>
+                                        <input type="date" id="cc-date" class="custom-select" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 1.25rem;">
+                                    <label style="display:block; font-size:0.8rem; color:var(--text-muted); margin-bottom:0.3rem;">Incident Details & Description</label>
+                                    <textarea id="cc-description" class="custom-select" rows="3" required placeholder="Describe how the deepfake or manipulated media was distributed..."></textarea>
+                                </div>
+
+                                <button type="submit" class="btn-analyze" style="background: linear-gradient(135deg, #ef4444, #dc2626);">Generate & Submit Cybercrime Evidence Complaint</button>
+                            </form>
+
+                            <div id="cybercrime-success-box" style="display:none; margin-top: 1.25rem; padding: 1.25rem; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 8px;">
+                                <h4 style="margin: 0 0 0.4rem 0; color: #ef4444;">🚨 Evidence Complaint Generated!</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-primary); margin-bottom: 0.75rem;">Official Cybercrime Complaint Packet compiled with SHA-256 evidence verification.</p>
+                                <a id="cc-complaint-download-btn" href="#" target="_blank" class="btn-choose" style="background: #ef4444; color: #fff; text-decoration: none;">Download Evidence Packet (PDF)</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <!-- Footer -->
             <footer class="app-footer">
-                <p>DeepShield AI • Dual-Engine Detection (ELA + Deep Learning) • For investigative use only</p>
+                <p>DeepShield AI • Multi-Modal Deepfake & Media Analysis Platform • Dual-Engine Forensics (TensorFlow/Keras + ELA + U-Net)</p>
             </footer>
         </main>
     </div>

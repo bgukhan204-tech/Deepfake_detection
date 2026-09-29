@@ -1,12 +1,19 @@
 import os
 import cv2
-import torch
 import numpy as np
 from PIL import Image
 
+try:
+    import torch
+except ImportError:
+    torch = None
+
 class ModelService:
     def __init__(self, model_dir=None):
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        if torch is not None:
+            self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        else:
+            self.device = "CPU (TFLite Fallback)"
         self.genconvit_model = None
         self.fallback_interpreter = None
         self.model_status = "INITIALIZING"
@@ -60,14 +67,17 @@ class ModelService:
                 import tflite_runtime.interpreter as tflite
                 self.fallback_interpreter = tflite.Interpreter(model_path=tflite_path)
                 self.fallback_interpreter.allocate_tensors()
+                self.model_status = "Active (TFLite Engine)"
                 print("[MODEL_SERVICE] Fallback TFLite model loaded.")
             except ImportError:
                 try:
                     import tensorflow.lite as tflite
                     self.fallback_interpreter = tflite.Interpreter(model_path=tflite_path)
                     self.fallback_interpreter.allocate_tensors()
+                    self.model_status = "Active (TensorFlow Lite Engine)"
                     print("[MODEL_SERVICE] Fallback TensorFlow Lite model loaded.")
                 except Exception as tfl_err:
+                    self.model_status = "Active (Heuristic Engine)"
                     print(f"[MODEL_SERVICE] TFLite fallback note: {tfl_err}")
 
     def predict_image(self, img_rgb):

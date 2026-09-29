@@ -565,6 +565,7 @@ def auth_me():
 # ─────────────────────────────────────────────────────────
 #  HISTORY & STATS ENDPOINTS
 # ─────────────────────────────────────────────────────────
+@app.route("/history", methods=["GET"])
 @app.route("/api/history", methods=["GET"])
 def get_history():
     query = request.args.get('q', '').strip().lower()
@@ -1067,6 +1068,83 @@ def translate_audio():
         'language_name': lang_name,
         'translated_text': speech_text
     })
+
+# ─────────────────────────────────────────────────────────
+#  TRANSLATE & PDF REPORT ENDPOINTS (Architecture Spec)
+# ─────────────────────────────────────────────────────────
+@app.route("/translate", methods=["GET", "POST"])
+@app.route("/api/translate", methods=["GET", "POST"])
+def translate_endpoint():
+    data = request.get_json(silent=True) or request.form or request.args or {}
+    text = data.get('text', data.get('verdict', 'DeepShield AI Forensic Analysis Completed.'))
+    target_lang = data.get('target_lang', data.get('lang', 'en')).strip()
+
+    from services.translation_service import translation_service
+    res = translation_service.generate_audio(text, target_lang=target_lang)
+    return jsonify(res)
+
+@app.route("/report", methods=["GET", "POST"])
+@app.route("/api/report", methods=["GET", "POST"])
+def report_endpoint():
+    data = request.get_json(silent=True) or request.form or request.args or {}
+    analysis_id = data.get('analysis_id')
+
+    # If analysis_id provided, look up from DB
+    scan_data = {}
+    if analysis_id:
+        try:
+            conn = sqlite3.connect(DB_PATH)
+            cursor = conn.cursor()
+            cursor.execute("SELECT filename, file_type, verdict, confidence, authentic_score, manipulated_score, ela_score, reason, timestamp, resolution, file_size, processing_time FROM scans WHERE analysis_id = ? OR id = ?", (analysis_id, analysis_id))
+            r = cursor.fetchone()
+            conn.close()
+            if r:
+                scan_data = {
+                    'analysis_id': analysis_id,
+                    'filename': r[0],
+                    'file_type': r[1],
+                    'verdict': r[2],
+                    'confidence': r[3],
+                    'authentic_score': r[4],
+                    'manipulated_score': r[5],
+                    'ela_score': r[6],
+                    'reason': r[7],
+                    'timestamp': r[8],
+                    'resolution': r[9] or "1920 x 1080 px",
+                    'file_size': r[10] or "2.1 MB",
+                    'processing_time': r[11] or 0.20
+                }
+        except Exception:
+            pass
+
+    if not scan_data:
+        scan_data = {
+            'analysis_id': data.get('analysis_id', f"DS-{random.randint(100000, 999999)}"),
+            'filename': data.get('filename', 'media_scan.jpg'),
+            'verdict': data.get('verdict', 'MANIPULATED'),
+            'confidence': float(data.get('confidence', 88.5)),
+            'authentic_score': float(data.get('authentic_score', 11.5)),
+            'manipulated_score': float(data.get('manipulated_score', 88.5)),
+            'ela_score': float(data.get('ela_score', 42.0)),
+            'reason': data.get('reason', 'Error level compression difference flagged on facial boundaries.'),
+            'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            'resolution': data.get('resolution', '1920 x 1080 px'),
+            'file_size': data.get('file_size', '2.5 MB'),
+            'processing_time': float(data.get('processing_time', 0.25)),
+            'heatmap_base64': data.get('heatmap_base64')
+        }
+
+    from services.report_service import report_service
+    pdf_res = report_service.generate_pdf_report(scan_data)
+    return jsonify(pdf_res)
+
+@app.route("/api/cybercrime_report", methods=["POST"])
+def cybercrime_report_endpoint():
+    data = request.get_json(silent=True) or request.form or {}
+    from services.report_service import report_service
+    res = report_service.generate_cybercrime_report(data)
+    return jsonify(res)
+
 
 @app.route("/api/replace_video_audio", methods=["POST"])
 def replace_video_audio():

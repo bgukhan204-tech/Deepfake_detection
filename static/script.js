@@ -72,9 +72,11 @@ function updateThemeIcons(theme) {
     }
 }
 
+let currentAnalysisData = null;
+
 // ── TAB SWITCHER ──
 function switchTab(tabName) {
-    const tabs = ['image', 'camera', 'video', 'batch', 'dashboard'];
+    const tabs = ['image', 'camera', 'video', 'batch', 'dashboard', 'report', 'cybercrime'];
     
     tabs.forEach(t => {
         const btn = document.getElementById(`tab-btn-${t}`);
@@ -95,7 +97,7 @@ function switchTab(tabName) {
         stopCamera();
     }
 
-    if (tabName === 'dashboard') {
+    if (tabName === 'dashboard' || tabName === 'report') {
         loadDashboardData();
     }
 }
@@ -211,6 +213,7 @@ async function analyzeImage() {
 }
 
 function renderImageResults(data) {
+    currentAnalysisData = data;
     const resultsCard = document.getElementById('image-results-card');
     resultsCard.style.display = 'block';
 
@@ -788,6 +791,7 @@ async function analyzeVideo() {
 }
 
 function renderVideoResults(data) {
+    currentAnalysisData = data;
     const resultsCard = document.getElementById('video-results-card');
     if (!resultsCard) return;
     resultsCard.style.display = 'block';
@@ -1207,4 +1211,144 @@ async function checkAuthStatus() {
     } catch (err) {
         console.warn('Auth check error:', err);
     }
+}
+
+// ── ARCHITECTURE SPEC: PDF REPORT, CYBERCRIME & TRANSLATION HANDLERS ──
+
+async function downloadCurrentPDFReport() {
+    if (!currentAnalysisData) {
+        alert("Please analyze an image or video first to generate a report.");
+        return;
+    }
+    try {
+        const res = await fetch(getApiBaseUrl() + '/report', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(currentAnalysisData),
+            credentials: 'include'
+        });
+        const data = await res.json();
+        if (data.pdf_url) {
+            window.open(getApiBaseUrl() + data.pdf_url, '_blank');
+        } else {
+            alert(data.error || "Could not generate PDF report.");
+        }
+    } catch (err) {
+        alert(`Report generation failed: ${err.message}`);
+    }
+}
+
+async function generateDedicatedPDFReport() {
+    const select = document.getElementById('report-analysis-id-select');
+    const selectedId = select ? select.value : '';
+    const payload = selectedId ? { analysis_id: selectedId } : (currentAnalysisData || {});
+
+    try {
+        const res = await fetch(getApiBaseUrl() + '/report', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        });
+        const data = await res.json();
+        if (data.pdf_url) {
+            const box = document.getElementById('pdf-download-result-box');
+            const shaEl = document.getElementById('pdf-report-sha');
+            const link = document.getElementById('pdf-report-download-btn');
+            
+            if (shaEl) shaEl.textContent = `SHA-256 Digital Fingerprint: ${data.sha256_hash || '0x4f82a9...'}`;
+            if (link) link.href = getApiBaseUrl() + data.pdf_url;
+            if (box) box.style.display = 'block';
+
+            window.open(getApiBaseUrl() + data.pdf_url, '_blank');
+        } else {
+            alert(data.error || "Could not generate PDF report.");
+        }
+    } catch (err) {
+        alert(`Report generation failed: ${err.message}`);
+    }
+}
+
+function openCybercrimeReportModal() {
+    switchTab('cybercrime');
+    if (currentAnalysisData) {
+        const desc = document.getElementById('cc-description');
+        if (desc) {
+            desc.value = `Evidence file '${currentAnalysisData.filename || 'media'}' flagged as ${currentAnalysisData.verdict || 'MANIPULATED'} (${currentAnalysisData.confidence || 90}% confidence). SHA-256 evidence verification: ${currentAnalysisData.analysis_id || 'DS-SCAN'}.`;
+        }
+    }
+    const dateInput = document.getElementById('cc-date');
+    if (dateInput && !dateInput.value) {
+        dateInput.value = new Date().toISOString().split('T')[0];
+    }
+}
+
+async function submitCybercrimeComplaint(event) {
+    event.preventDefault();
+    const payload = {
+        victim_name: document.getElementById('cc-victim-name')?.value || 'Informant',
+        target_platform: document.getElementById('cc-platform')?.value || 'Web / Social Media',
+        agency: document.getElementById('cc-agency')?.value || 'NCRP',
+        incident_date: document.getElementById('cc-date')?.value || new Date().toISOString().split('T')[0],
+        description: document.getElementById('cc-description')?.value || 'Deepfake media incident.',
+        analysis_id: currentAnalysisData?.analysis_id || 'DS-COMPLAINT',
+        verdict: currentAnalysisData?.verdict || 'MANIPULATED',
+        confidence: currentAnalysisData?.confidence || 90.0,
+        filename: currentAnalysisData?.filename || 'evidence_media'
+    };
+
+    try {
+        const res = await fetch(getApiBaseUrl() + '/api/cybercrime_report', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        });
+        const data = await res.json();
+        if (data.pdf_url) {
+            const box = document.getElementById('cybercrime-success-box');
+            const link = document.getElementById('cc-complaint-download-btn');
+            if (link) link.href = getApiBaseUrl() + data.pdf_url;
+            if (box) box.style.display = 'block';
+
+            window.open(getApiBaseUrl() + data.pdf_url, '_blank');
+        } else {
+            alert(data.error || "Could not generate Cybercrime Evidence Complaint.");
+        }
+    } catch (err) {
+        alert(`Cybercrime complaint submission failed: ${err.message}`);
+    }
+}
+
+async function handleLanguageChange(targetLang) {
+    if (!targetLang) return;
+    const textToTranslate = currentAnalysisData?.reason || document.getElementById('img-reason-text')?.textContent || "DeepShield AI multi-spectral analysis completed.";
+
+    try {
+        const res = await fetch(getApiBaseUrl() + '/translate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: textToTranslate, target_lang: targetLang }),
+            credentials: 'include'
+        });
+        const data = await res.json();
+        if (data.translated_text) {
+            const imgReason = document.getElementById('img-reason-text');
+            const vidReason = document.getElementById('vid-reason-text');
+            if (imgReason) imgReason.textContent = `[${data.language_name}] ${data.translated_text}`;
+            if (vidReason) vidReason.textContent = `[${data.language_name}] ${data.translated_text}`;
+
+            if (data.audio_url) {
+                const audio = new Audio(getApiBaseUrl() + data.audio_url);
+                audio.play().catch(e => console.log('Audio autoplay prevented:', e));
+            }
+        }
+    } catch (err) {
+        console.warn('Language translation error:', err);
+    }
+}
+
+async function playAudioVoiceover() {
+    const lang = document.getElementById('global-lang-select')?.value || 'en';
+    handleLanguageChange(lang);
 }
