@@ -64,6 +64,20 @@ try:
     assert r_translate.status_code == 200, "Translate endpoint failed"
     print("[OK] API /translate endpoint passed!")
 
+    # 6. Upload Endpoints Integration Test
+    import io
+    r_img1 = client.post('/predict', data={'file': (io.BytesIO(img_bytes), 'test.jpg')}, content_type='multipart/form-data')
+    assert r_img1.status_code == 200, f"/predict failed with {r_img1.status_code}"
+    print("[OK] API /predict (image upload) passed!")
+
+    r_img2 = client.post('/api/analyze/image', data={'file': (io.BytesIO(img_bytes), 'test.jpg')}, content_type='multipart/form-data')
+    assert r_img2.status_code == 200, f"/api/analyze/image failed with {r_img2.status_code}"
+    print("[OK] API /api/analyze/image (image upload) passed!")
+
+    r_vid1 = client.post('/predict_video', data={'file': (io.BytesIO(img_bytes), 'test.mp4')}, content_type='multipart/form-data')
+    assert r_vid1.status_code == 200, f"/predict_video failed with {r_vid1.status_code}"
+    print("[OK] API /predict_video (video upload) passed!")
+
     print("\n========================================================")
     print("ALL DEEPSHIELD AI SYSTEM TESTS PASSED SUCCESSFULLY!")
     print("========================================================")

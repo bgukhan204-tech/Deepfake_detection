@@ -63,22 +63,26 @@ class ModelService:
         # 2. Load Fallback TFLite Interpreter if available
         tflite_path = os.path.join(self.model_dir, "deepfake_model.tflite")
         if os.path.exists(tflite_path):
+            tflite = None
             try:
                 import tflite_runtime.interpreter as tflite
-                self.fallback_interpreter = tflite.Interpreter(model_path=tflite_path)
-                self.fallback_interpreter.allocate_tensors()
-                self.model_status = "Active (TFLite Engine)"
-                print("[MODEL_SERVICE] Fallback TFLite model loaded.")
             except ImportError:
                 try:
                     import tensorflow.lite as tflite
+                except ImportError:
+                    tflite = None
+
+            if tflite is not None:
+                try:
                     self.fallback_interpreter = tflite.Interpreter(model_path=tflite_path)
                     self.fallback_interpreter.allocate_tensors()
                     self.model_status = "Active (TensorFlow Lite Engine)"
-                    print("[MODEL_SERVICE] Fallback TensorFlow Lite model loaded.")
+                    print("[MODEL_SERVICE] Fallback TFLite model loaded.")
                 except Exception as tfl_err:
                     self.model_status = "Active (Heuristic Engine)"
                     print(f"[MODEL_SERVICE] TFLite fallback note: {tfl_err}")
+            else:
+                self.model_status = "Active (Heuristic Engine)"
 
     def predict_image(self, img_rgb):
         """

@@ -7,6 +7,7 @@ import sqlite3
 import hashlib
 import tempfile
 import traceback
+import subprocess
 import numpy as np
 from PIL import Image
 from datetime import datetime
@@ -286,8 +287,7 @@ def compute_texture_analysis(img_array):
 #  Engine 3: Neural Model Inference (TFLite)
 # ─────────────────────────────────────────────────────────
 def run_model(img_array):
-    interp, inp, out = load_model()
-    if interp is None:
+    if img_array is None or not hasattr(img_array, 'shape'):
         return None
 
     h_img, w_img, _ = img_array.shape
@@ -322,6 +322,10 @@ def run_model(img_array):
         x2 = min(w_img, cx + min_side // 2)
         crop = img_array[y1:y2, x1:x2]
 
+    if crop.size == 0:
+        crop = img_array
+
+    # 1. Attempt ModelService / Fallback engine
     try:
         from services.model_service import model_service
         pred_res = model_service.predict_image(crop)
@@ -330,18 +334,21 @@ def run_model(img_array):
     except Exception as ms_err:
         print(f"[RUN_MODEL] ModelService note: {ms_err}")
 
-    interp, inp, out = load_model()
-    if interp is None:
-        return None
+    # 2. Attempt TFLite interpreter from load_model if ModelService fallback fails
+    try:
+        interp, inp, out = load_model()
+        if interp is not None and inp and out:
+            inp_img = cv2.resize(crop, (224, 224)).astype(np.float32) / 255.0
+            inp_img = np.expand_dims(inp_img, axis=0)
+            
+            interp.set_tensor(inp[0]['index'], inp_img)
+            interp.invoke()
+            pred = float(interp.get_tensor(out[0]['index'])[0][0])
+            return pred
+    except Exception as tf_err:
+        print(f"[RUN_MODEL] TFLite inference error: {tf_err}")
 
-    inp_img = cv2.resize(crop, (224, 224)).astype(np.float32) / 255.0
-    inp_img = np.expand_dims(inp_img, axis=0)
-    
-    interp.set_tensor(inp[0]['index'], inp_img)
-    interp.invoke()
-    pred = float(interp.get_tensor(out[0]['index'])[0][0])
-    
-    return pred
+    return None
 
 
 # ─────────────────────────────────────────────────────────
@@ -402,28 +409,6 @@ def save_scan_record(filename, file_type, status, confidence, auth_score, manip_
     except Exception as e:
         print(f"Error saving scan history: {e}")
         return generate_analysis_id()
-
-
-# ─────────────────────────────────────────────────────────
-#  Flask Routes
-# ─────────────────────────────────────────────────────────
-from flask import send_from_directory
-
-@app.route("/", defaults={"path": ""})
-@app.route("/<path:path>")
-def serve(path):
-    # Do not capture API routes or documentation
-    if path.startswith("api/") or path.startswith("predict") or path == "health":
-        return jsonify({'error': 'Not found'}), 404
-        
-    dist_dir = os.path.join(os.path.dirname(__file__), "frontend", "dist")
-    if path != "" and os.path.exists(os.path.join(dist_dir, path)):
-        return send_from_directory(dist_dir, path)
-    elif os.path.exists(os.path.join(dist_dir, "index.html")):
-        return send_from_directory(dist_dir, "index.html")
-    return render_template("index.html")
-
-
 
 
 # ─────────────────────────────────────────────────────────
@@ -861,11 +846,13 @@ def predict_video():
         file_size = f"{round(file_len / (1024 * 1024), 2)} MB" if file_len >= 1048576 else f"{round(file_len / 1024, 1)} KB"
 
         cap          = cv2.VideoCapture(tmp_path)
-        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        fps          = cap.get(cv2.CAP_PROP_FPS) or 25
-        duration     = round(total_frames / fps, 1) if fps > 0 else 0
-        v_width      = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        v_height     = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        raw_frames   = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        total_frames = max(0, raw_frames)
+        fps_val      = cap.get(cv2.CAP_PROP_FPS)
+        fps          = fps_val if (fps_val and fps_val > 0 and fps_val <= 120) else 25.0
+        duration     = round(total_frames / fps, 1) if total_frames > 0 else 0.0
+        v_width      = max(0, int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)))
+        v_height     = max(0, int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
         resolution   = f"{v_width} x {v_height} px" if v_width > 0 else "1080p Standard"
 
         MAX_SAMPLES = 12
@@ -1209,6 +1196,21 @@ def download_file(filename):
     if not os.path.exists(file_path):
         return jsonify({'error': 'File not found'}), 404
     return send_from_directory(EXPORTS_DIR, filename, as_attachment=True)
+
+# ─────────────────────────────────────────────────────────
+#  CATCH-ALL SPA ROUTE (REGISTERED LAST SO API ROUTES TAKE PRECEDENCE)
+# ─────────────────────────────────────────────────────────
+from flask import send_from_directory
+
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve(path):
+    dist_dir = os.path.join(os.path.dirname(__file__), "frontend", "dist")
+    if path != "" and os.path.exists(os.path.join(dist_dir, path)):
+        return send_from_directory(dist_dir, path)
+    elif os.path.exists(os.path.join(dist_dir, "index.html")):
+        return send_from_directory(dist_dir, "index.html")
+    return render_template("index.html")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
